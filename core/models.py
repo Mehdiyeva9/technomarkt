@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Bannerimage(models.Model):
     image = models.ImageField(upload_to="pro_img/")
@@ -41,6 +42,21 @@ class Product(models.Model):
 
     def __str__(self):
             return self.name
+    
+class FavoriteList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_favori_items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_favori_items')
+
+    def __str__(self):
+        return self.product
+    
+class Basket(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="basket_product")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_basket")
+    quantity = models.IntegerField(default=1)
+
+    def __str__(self):
+        return self.product
 
 class ProductAbout(models.Model):
     title = models.CharField(max_length=30)
